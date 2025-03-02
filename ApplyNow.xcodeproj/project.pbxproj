@@ -58,6 +58,8 @@
 		47F7328F2D74DC5C00296E96 /* ApplyNow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApplyNow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47F7329B2D74DC5C00296E96 /* ApplyNow Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ApplyNow Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47F732A52D74DC5C00296E96 /* ApplyNow Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ApplyNow Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47F732E12D74E0E600296E96 /* ApplyNow (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ApplyNow (iOS).entitlements"; sourceTree = "<group>"; };
+		47F732E22D74E2A500296E96 /* ApplyNow Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ApplyNow Extension (iOS).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -69,6 +71,7 @@
 				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
+				ResumeManager.swift,
 				ViewController.swift,
 			);
 			target = 47F7327C2D74DC5C00296E96 /* ApplyNow (iOS) */;
@@ -95,6 +98,7 @@
 				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
+				ResumeManager.swift,
 				ViewController.swift,
 			);
 			target = 47F7328E2D74DC5C00296E96 /* ApplyNow (macOS) */;
@@ -136,6 +140,20 @@
 			);
 			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
 		};
+		47F732E82D74E4B400296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ResumeManager.swift,
+			);
+			target = 47F7329A2D74DC5C00296E96 /* ApplyNow Extension (iOS) */;
+		};
+		47F732E92D74E4B400296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ResumeManager.swift,
+			);
+			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -144,6 +162,8 @@
 			exceptions = (
 				47F732CA2D74DC5C00296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow (iOS)" target */,
 				47F732D42D74DC5C00296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow (macOS)" target */,
+				47F732E82D74E4B400296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */,
+				47F732E92D74E4B400296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (macOS)" target */,
 			);
 			path = "Shared (App)";
 			sourceTree = "<group>";
@@ -227,6 +247,8 @@
 		47F732602D74DC5A00296E96 = {
 			isa = PBXGroup;
 			children = (
+				47F732E22D74E2A500296E96 /* ApplyNow Extension (iOS).entitlements */,
+				47F732E12D74E0E600296E96 /* ApplyNow (iOS).entitlements */,
 				47F732652D74DC5B00296E96 /* Shared (App) */,
 				47F7326E2D74DC5C00296E96 /* Shared (Extension) */,
 				47F7327F2D74DC5C00296E96 /* iOS (App) */,
@@ -468,9 +490,10 @@
 		47F732CC2D74DC5C00296E96 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "ApplyNow Extension (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ApplyNow Extension";
@@ -486,7 +509,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply.Extension";
 				PRODUCT_NAME = "ApplyNow Extension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -499,9 +522,10 @@
 		47F732CD2D74DC5C00296E96 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "ApplyNow Extension (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ApplyNow Extension";
@@ -517,7 +541,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply.Extension";
 				PRODUCT_NAME = "ApplyNow Extension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -533,9 +557,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ApplyNow (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ApplyNow;
@@ -556,7 +581,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply";
 				PRODUCT_NAME = ApplyNow;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -570,9 +595,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ApplyNow (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ApplyNow;
@@ -593,7 +619,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply";
 				PRODUCT_NAME = ApplyNow;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -609,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/ApplyNow.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
@@ -626,7 +652,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply.Extension";
 				PRODUCT_NAME = "ApplyNow Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -641,7 +667,7 @@
 				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/ApplyNow.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
@@ -658,7 +684,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply.Extension";
 				PRODUCT_NAME = "ApplyNow Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -675,7 +701,7 @@
 				CODE_SIGN_ENTITLEMENTS = "macOS (App)/ApplyNow.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ApplyNow;
@@ -693,7 +719,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply";
 				PRODUCT_NAME = ApplyNow;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -709,7 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = "macOS (App)/ApplyNow.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YKJKT6UG59;
+				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ApplyNow;
@@ -727,7 +753,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.ApplyNow";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riff-tech.EasyApply";
 				PRODUCT_NAME = ApplyNow;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;

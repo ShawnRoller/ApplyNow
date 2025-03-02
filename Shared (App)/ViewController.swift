@@ -9,18 +9,33 @@ import WebKit
 
 #if os(iOS)
 import UIKit
+import UniformTypeIdentifiers
 typealias PlatformViewController = UIViewController
 #elseif os(macOS)
 import Cocoa
 import SafariServices
+import UniformTypeIdentifiers
 typealias PlatformViewController = NSViewController
 #endif
+
+// Import ResumeManager from the same module
+import Foundation
 
 let extensionBundleIdentifier = "com.riff-tech.ApplyNow.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
     @IBOutlet var webView: WKWebView!
+
+    #if os(iOS)
+    private lazy var documentPicker: UIDocumentPickerViewController = {
+        let types: [UTType] = [.pdf]
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: types)
+        picker.delegate = self
+        picker.allowsMultipleSelection = false
+        return picker
+    }()
+    #endif
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,25 +72,85 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             }
         }
 #endif
+
+        // Update UI with existing resume if available
+        if let resume = ResumeManager.shared.getResume() {
+            updateResumeUI(withFilename: resume.filename)
+        }
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-#if os(macOS)
-        if (message.body as! String != "open-preferences") {
-            return
-        }
-
-        SFSafariApplication.showPreferencesForExtension(withIdentifier: extensionBundleIdentifier) { error in
-            guard error == nil else {
-                // Insert code to inform the user that something went wrong.
-                return
+        guard let command = message.body as? String else { return }
+        
+        switch command {
+        case "open-preferences":
+            #if os(macOS)
+            SFSafariApplication.showPreferencesForExtension(withIdentifier: extensionBundleIdentifier) { error in
+                guard error == nil else {
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    NSApp.terminate(self)
+                }
             }
-
-            DispatchQueue.main.async {
-                NSApp.terminate(self)
+            #endif
+            
+        case "select-resume":
+            selectResume()
+            
+        case "remove-resume":
+            if ResumeManager.shared.removeResume() {
+                updateResumeUI(withFilename: nil)
             }
+            
+        default:
+            break
         }
-#endif
     }
 
+    private func selectResume() {
+        #if os(iOS)
+        present(documentPicker, animated: true)
+        #elseif os(macOS)
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.pdf]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        
+        panel.beginSheetModal(for: view.window!) { [weak self] response in
+            guard let self = self,
+                  response == .OK,
+                  let url = panel.url,
+                  let data = try? Data(contentsOf: url) else {
+                return
+            }
+            
+            if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
+                self.updateResumeUI(withFilename: url.lastPathComponent)
+            }
+        }
+        #endif
+    }
+
+    private func updateResumeUI(withFilename filename: String?) {
+        let script = "updateResumeStatus('\(filename ?? "")')"
+        webView.evaluateJavaScript(script)
+    }
 }
+
+#if os(iOS)
+extension ViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let url = urls.first,
+              let data = try? Data(contentsOf: url) else {
+            return
+        }
+        
+        if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
+            updateResumeUI(withFilename: url.lastPathComponent)
+        }
+    }
+}
+#endif
