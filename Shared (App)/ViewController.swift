@@ -143,14 +143,28 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
 #if os(iOS)
 extension ViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first,
-              let data = try? Data(contentsOf: url) else {
+        guard let url = urls.first else {
+            print("Error: no URL returned")
             return
         }
         
-        if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
-            updateResumeUI(withFilename: url.lastPathComponent)
+        let didStartAccessing = url.startAccessingSecurityScopedResource()
+        
+        do {
+            let data = try Data(contentsOf: url)
+            if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
+                updateResumeUI(withFilename: url.lastPathComponent)
+            }
+        } catch {
+            print("Error reading data from URL: \(error.localizedDescription)")
         }
+        
+        // Stop accessing security-scoped resource
+        if didStartAccessing {
+            url.stopAccessingSecurityScopedResource()
+        }
+        
+        dismiss(animated: true)
     }
 }
 #endif
