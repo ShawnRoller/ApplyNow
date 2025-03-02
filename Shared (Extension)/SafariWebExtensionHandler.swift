@@ -29,14 +29,29 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
         os_log(.default, "Received message from browser.runtime.sendNativeMessage: %@ (profile: %@)", String(describing: message), profile?.uuidString ?? "none")
 
+        // Handle the message
         let response = NSExtensionItem()
-        if #available(iOS 15.0, macOS 11.0, *) {
-            response.userInfo = [ SFExtensionMessageKey: [ "echo": message ] ]
-        } else {
-            response.userInfo = [ "message": [ "echo": message ] ]
+        var responseMessage: [String: Any] = [:]
+        
+        if let messageDict = message as? [String: Any],
+           let command = messageDict["command"] as? String {
+            switch command {
+            case "get-resume":
+                if let resume = ResumeManager.shared.getResume() {
+                    responseMessage = ["filename": resume.filename]
+                }
+            default:
+                break
+            }
         }
-
-        context.completeRequest(returningItems: [ response ], completionHandler: nil)
+        
+        if #available(iOS 15.0, macOS 11.0, *) {
+            response.userInfo = [SFExtensionMessageKey: responseMessage]
+        } else {
+            response.userInfo = ["message": responseMessage]
+        }
+        
+        context.completeRequest(returningItems: [response], completionHandler: nil)
     }
 
 }

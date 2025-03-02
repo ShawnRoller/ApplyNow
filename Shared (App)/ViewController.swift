@@ -21,7 +21,7 @@ typealias PlatformViewController = NSViewController
 // Import ResumeManager from the same module
 import Foundation
 
-let extensionBundleIdentifier = "com.riff-tech.ApplyNow.Extension"
+let extensionBundleIdentifier = "com.riff-tech.EasyApply.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
 

@@ -1,15 +1,54 @@
 :root {
-    color-scheme: light dark;
-}
-
-body {
-    width: 100px;
-    padding: 10px;
-
-    font-family: system-ui;
-    text-align: center;
+  --primary-color: #007aff;
+  --text-color: #000000;
+  --background-color: #ffffff;
+  --spacing: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
-    /* Dark Mode styles go here. */
+  :root {
+    --text-color: #ffffff;
+    --background-color: #1c1c1e;
+  }
+}
+
+body {
+  width: 300px;
+  margin: 0;
+  padding: var(--spacing);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.resume-info {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) / 2);
+}
+
+#resume-status {
+  margin: 0;
+  font-size: 1em;
+  opacity: 0.8;
 }
