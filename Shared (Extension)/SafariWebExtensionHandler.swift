@@ -7,6 +7,7 @@
 
 import SafariServices
 import os.log
+import Foundation
 
 class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
@@ -27,7 +28,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
             message = request?.userInfo?["message"]
         }
 
-        os_log(.default, "Received message from browser.runtime.sendNativeMessage: %@ (profile: %@)", String(describing: message), profile?.uuidString ?? "none")
+        os_log(.debug, "Received message from browser.runtime.sendNativeMessage: %{public}@", String(describing: message))
 
         // Handle the message
         let response = NSExtensionItem()
@@ -35,15 +36,27 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         
         if let messageDict = message as? [String: Any],
            let command = messageDict["command"] as? String {
+            os_log(.debug, "Processing command: %{public}@", command)
+            
             switch command {
             case "get-resume":
                 if let resume = ResumeManager.shared.getResume() {
+                    os_log(.debug, "Found resume: %{public}@", resume.filename)
                     responseMessage = ["filename": resume.filename]
+                } else {
+                    os_log(.debug, "No resume found")
+                    responseMessage = ["filename": NSNull()]
                 }
             default:
-                break
+                os_log(.error, "Unknown command: %{public}@", command)
+                responseMessage = ["error": "Unknown command"]
             }
+        } else {
+            os_log(.error, "Invalid message format")
+            responseMessage = ["error": "Invalid message format"]
         }
+        
+        os_log(.debug, "Sending response: %{public}@", String(describing: responseMessage))
         
         if #available(iOS 15.0, macOS 11.0, *) {
             response.userInfo = [SFExtensionMessageKey: responseMessage]
