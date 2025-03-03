@@ -1,6 +1,6 @@
 # ApplyNow - AI-Powered Cover Letter Generator
 
-ApplyNow is a Safari extension for macOS, iOS, and iPadOS that helps you generate customized cover letters using AI, based on your resume and the job descriptions you're viewing. The extension uses OpenAI's API to create tailored cover letters that you can easily export and use in your job applications.
+ApplyNow is a Safari extension for macOS, iOS, and iPadOS that helps you generate customized cover letters using AI, based on your resume and the job description you're viewing in Safari. The extension uses OpenAI's API to create tailored cover letters that you can easily export and use in your job applications.
 
 > 🎉 **Coming Soon**: ApplyNow will be available on TestFlight for easier installation and testing!
 
@@ -94,7 +94,7 @@ Before you begin, ensure you have the following:
 3. Navigate to any job posting in Safari
 4. Click the ApplyNow extension icon in Safari
 5. Review and customize the generated cover letter
-6. Export your cover letter in your preferred format
+6. Export your cover letter in text format (PDF coming soon)
 
 ## Privacy and Security
 
