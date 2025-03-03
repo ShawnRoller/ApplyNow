@@ -3,7 +3,6 @@
   --text-color: #000000;
   --background-color: #ffffff;
   --spacing: 16px;
-  --popup-width: 350px;
   --content-width: 100%;
 }
 
@@ -19,21 +18,18 @@
 }
 
 body {
-  width: var(--popup-width);
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-  display: flex;
-  justify-content: center;
 }
 
+/* Full-width content centered horizontally (with horizontal margins equal to var(--spacing)) */
 .content-wrapper {
-  width: var(--content-width);
+  width: calc(100% - 2 * var(--spacing));
+  margin: 0 auto;
   padding: var(--spacing);
-  display: flex;
-  justify-content: center;
 }
 
 .container {
@@ -56,7 +52,7 @@ h2 {
   font-weight: 500;
 }
 
-/* Combine selectors with the same properties */
+/* Combined layout for resume and cover letter sections */
 .resume-info,
 .cover-letter-section {
   display: flex;
@@ -138,4 +134,20 @@ h2 {
   background-color: #cccccc;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+/* Loading overlay covers the entire screen with a semi-transparent dark background */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none;
 }
