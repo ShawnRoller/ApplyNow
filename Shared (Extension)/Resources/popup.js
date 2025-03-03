@@ -14,6 +14,15 @@ function updateResumeStatus(text) {
   }
 }
 
+/**
+ * Gets the current active tab
+ * @returns {Promise<browser.tabs.Tab>} The current active tab
+ */
+async function getCurrentTab() {
+  const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+  return tab;
+}
+
 // Request resume information from native code
 browser.runtime
   .sendNativeMessage("com.riff-tech.EasyApply.Extension", {
@@ -31,3 +40,42 @@ browser.runtime
     console.error("Error fetching resume:", error);
     updateResumeStatus("Error loading resume information");
   });
+
+/**
+ * Sets up event listeners for the buttons
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  // Test button setup
+  const testButton = document.getElementById("test-button");
+  if (testButton) {
+    testButton.addEventListener("click", () => {
+      console.log("Test button clicked!");
+    });
+  } else {
+    console.error("Test button element not found");
+  }
+
+  // Get content button setup
+  const getContentButton = document.getElementById("get-content-button");
+  if (getContentButton) {
+    getContentButton.addEventListener("click", async () => {
+      try {
+        const tab = await getCurrentTab();
+        if (!tab) {
+          console.error("No active tab found");
+          return;
+        }
+
+        const response = await browser.tabs.sendMessage(tab.id, {
+          command: "get-page-content",
+        });
+
+        console.log("Page content received:", response);
+      } catch (error) {
+        console.error("Error getting page content:", error);
+      }
+    });
+  } else {
+    console.error("Get content button element not found");
+  }
+});
