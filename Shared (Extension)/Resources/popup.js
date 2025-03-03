@@ -42,6 +42,45 @@ browser.runtime
   });
 
 /**
+ * Creates a blob from the cover letter text for sharing
+ * @param {string} text - The cover letter text to share
+ * @returns {Blob} A blob containing the cover letter text
+ */
+function createCoverLetterBlob(text) {
+  return new Blob([text], { type: "text/plain" });
+}
+
+/**
+ * Shares the cover letter using the native share sheet
+ * @param {string} coverLetterText - The text content to share
+ */
+async function shareCoverLetter(coverLetterText) {
+  try {
+    const blob = createCoverLetterBlob(coverLetterText);
+    const file = new File([blob], "cover-letter.txt", { type: "text/plain" });
+
+    if (navigator.share && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "Cover Letter",
+      });
+    } else {
+      // Fallback for browsers that don't support native sharing
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "cover-letter.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  } catch (error) {
+    console.error("Error sharing cover letter:", error);
+  }
+}
+
+/**
  * Sets up event listeners for the buttons
  */
 document.addEventListener("DOMContentLoaded", () => {
@@ -69,16 +108,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await browser.tabs.sendMessage(tab.id, {
           command: "get-page-content",
         });
-          
-      const coverLetterDisplay = document.getElementById(
-        "cover-letter-display"
-      );
-      if (coverLetterDisplay && response) {
-        coverLetterDisplay.textContent =
-          typeof response === "string"
-            ? response
-            : JSON.stringify(response, null, 2);
-      }
+
+        const coverLetterDisplay = document.getElementById(
+          "cover-letter-display"
+        );
+        if (coverLetterDisplay && response) {
+          coverLetterDisplay.textContent =
+            typeof response === "string"
+              ? response
+              : JSON.stringify(response, null, 2);
+        }
       } catch (error) {
         console.error("Error getting page content:", error);
       }
@@ -119,5 +158,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Generate button element not found");
+  }
+
+  // Share button setup
+  const shareButton = document.getElementById("share-button");
+  if (shareButton) {
+    shareButton.addEventListener("click", () => {
+      const coverLetterDisplay = document.getElementById(
+        "cover-letter-display"
+      );
+      if (coverLetterDisplay && coverLetterDisplay.value) {
+        shareCoverLetter(coverLetterDisplay.value);
+      } else {
+        console.error("No cover letter content to share");
+      }
+    });
   }
 });

@@ -59,6 +59,34 @@ h2 {
   gap: calc(var(--spacing) / 2);
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+  background-color: rgba(0, 122, 255, 0.1);
+}
+
+.icon-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 #cover-letter-display {
   width: 100%;
   min-height: 200px;
