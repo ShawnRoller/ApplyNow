@@ -20,3 +20,19 @@ function handleNativeMessagingError(error) {
 browser.runtime.onInstalled.addListener(() => {
   console.log("Extension installed/updated");
 });
+
+// Listen for messages from content scripts or popup
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "get-resume") {
+    browser.runtime.sendNativeMessage("com.riff-tech.EasyApply.Extension", {
+      command: "get-resume"
+    }).then((nativeResponse) => {
+      sendResponse(nativeResponse);
+    }).catch((error) => {
+      console.error("Native messaging error:", error);
+      sendResponse({ error: error.message });
+    });
+    // Return true to indicate async response
+    return true;
+  }
+});

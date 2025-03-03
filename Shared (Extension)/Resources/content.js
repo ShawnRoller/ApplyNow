@@ -46,19 +46,14 @@ class APIError extends Error {
  * Gets the resume content from the native messaging
  * @returns {Promise<string>} The resume content
  */
-async function getResumeContent() {
-  try {
-    const response = await browser.runtime.sendNativeMessage(
-      "com.riff-tech.EasyApply.Extension",
-      {
-        command: "get-resume",
-      }
-    );
-    return response.content;
-  } catch (error) {
-    console.error("Error fetching resume:", error);
-    throw new APIError("Failed to get resume content", undefined, error);
-  }
+function getResumeContent() {
+    // Send a message to the background script to get resume data
+    browser.runtime.sendMessage({ type: "get-resume" }).then((response) => {
+      console.log("Received response from background:", response);
+        return response.content
+    }).catch((error) => {
+      console.error("Error in content script:", error);
+    });
 }
 
 /**
@@ -72,7 +67,7 @@ async function getResumeContent() {
 async function generateCoverLetter({ resume, jobDescription }) {
   // TODO: Move these to a secure configuration
   const config = {
-    apiKey: "YOUR_API_KEY", // This should be stored securely and injected
+    apiKey: "", // This should be stored securely and injected
     model: "gpt-4o-mini",
     temperature: 0.7,
     maxTokens: 1000,
@@ -148,9 +143,15 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === "generate-cover-letter") {
     (async () => {
       try {
+        const resumeContent = await getResumeContent();
+        const content = extractPageContent();
+          
+        console.log("resumeContent", resumeContent);
+          console.log("content", content);
+          
         const coverLetter = await generateCoverLetter({
-          resume: "test123",
-          jobDescription: "test123",
+          resume: resumeContent,
+          jobDescription: content,
         });
         console.log("Generated Cover Letter:", coverLetter);
         sendResponse(coverLetter);
