@@ -1,11 +1,3 @@
-browser.runtime.sendMessage({ greeting: "hello" }).then((response) => {
-  console.log("Received response: ", response);
-});
-
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Received request: ", request);
-});
-
 /**
  * Extracts the main content from the current page
  * @returns {Object} Object containing the page title and content
@@ -46,14 +38,15 @@ class APIError extends Error {
  * Gets the resume content from the native messaging
  * @returns {Promise<string>} The resume content
  */
-function getResumeContent() {
-    // Send a message to the background script to get resume data
-    browser.runtime.sendMessage({ type: "get-resume" }).then((response) => {
-      console.log("Received response from background:", response);
-        return response.content
-    }).catch((error) => {
-      console.error("Error in content script:", error);
-    });
+async function getResumeContent() {
+  try {
+    const response = await browser.runtime.sendMessage({ type: "get-resume" });
+    console.log("Received response from background:", response);
+    return response.content;
+  } catch (error) {
+    console.error("Error in content script:", error);
+    throw error;
+  }
 }
 
 /**
@@ -146,12 +139,9 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const resumeContent = await getResumeContent();
         const content = extractPageContent();
           
-        console.log("resumeContent", resumeContent);
-          console.log("content", content);
-          
         const coverLetter = await generateCoverLetter({
           resume: resumeContent,
-          jobDescription: content,
+          jobDescription: JSON.stringify(content),
         });
         console.log("Generated Cover Letter:", coverLetter);
         sendResponse(coverLetter);

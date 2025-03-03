@@ -23,6 +23,7 @@ browser.runtime.onInstalled.addListener(() => {
 
 // Listen for messages from content scripts or popup
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log("received request in background: ", message);
   if (message.type === "get-resume") {
     browser.runtime.sendNativeMessage("com.riff-tech.EasyApply.Extension", {
       command: "get-resume"

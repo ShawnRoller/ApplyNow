@@ -69,8 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await browser.tabs.sendMessage(tab.id, {
           command: "get-page-content",
         });
-
-        console.log("Page content received:", response);
+          
+      const coverLetterDisplay = document.getElementById(
+        "cover-letter-display"
+      );
+      if (coverLetterDisplay && response) {
+        coverLetterDisplay.textContent =
+          typeof response === "string"
+            ? response
+            : JSON.stringify(response, null, 2);
+      }
       } catch (error) {
         console.error("Error getting page content:", error);
       }

@@ -52,3 +52,45 @@ h2 {
   font-size: 1em;
   opacity: 0.8;
 }
+
+.cover-letter-section {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) / 2);
+}
+
+#cover-letter-display {
+  width: 100%;
+  min-height: 200px;
+  padding: calc(var(--spacing) / 2);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 0.9em;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+#cover-letter-display:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+}
+
+.action-button {
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.action-button:hover {
+  opacity: 0.9;
+}
