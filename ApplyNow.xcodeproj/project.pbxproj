@@ -68,6 +68,7 @@
 			membershipExceptions = (
 				"/Localized: Resources/Main.html",
 				Assets.xcassets,
+				OpenAIService.swift,
 				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
@@ -143,6 +144,7 @@
 		47F734812D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				OpenAIService.swift,
 				StoreManager.swift,
 			);
 			target = 47F7329A2D74DC5C00296E96 /* ApplyNow Extension (iOS) */;
@@ -153,6 +155,13 @@
 				StoreManager.swift,
 			);
 			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
+		};
+		47F7348B2D763ADA00296E96 /* Exceptions for "Shared (Extension)" folder in "ApplyNow (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SafariWebExtensionHandler.swift,
+			);
+			target = 47F7327C2D74DC5C00296E96 /* ApplyNow (iOS) */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -171,6 +180,7 @@
 		47F7326E2D74DC5C00296E96 /* Shared (Extension) */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				47F7348B2D763ADA00296E96 /* Exceptions for "Shared (Extension)" folder in "ApplyNow (iOS)" target */,
 				47F732DD2D74DC5C00296E96 /* Exceptions for "Shared (Extension)" folder in "ApplyNow Extension (iOS)" target */,
 				47F732DE2D74DC5C00296E96 /* Exceptions for "Shared (Extension)" folder in "ApplyNow Extension (macOS)" target */,
 			);

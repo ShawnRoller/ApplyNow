@@ -1,39 +1,80 @@
 // Log when background script is loaded
 console.log("Background script loaded");
 
+/**
+ * Handles native messaging errors
+ * @param {Error} error - The error to handle
+ */
+function handleNativeMessagingError(error) {
+  console.error("Native messaging error:", error);
+}
+
 // Listen for runtime messages
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("Background received message:", message);
-    return false; // Don't use sendResponse
+  console.log("Background received message:", message);
+  console.log("Message type:", message.type);
+  console.log("Message data:", message.data);
+
+  switch (message.type) {
+    case "get-resume":
+      console.log("Processing get-resume request");
+      browser.runtime
+        .sendNativeMessage("com.riff-tech.EasyApply.Extension", {
+          command: "get-resume",
+        })
+        .then((nativeResponse) => {
+          console.log("Native response for get-resume:", nativeResponse);
+          sendResponse(nativeResponse);
+        })
+        .catch((error) => {
+          handleNativeMessagingError(error);
+          sendResponse({ error: error.message });
+        });
+          
+      return true;
+
+    case "generate-cover-letter":
+      console.log("Processing generate-cover-letter request");
+      if (!message.data) {
+        console.error("No data provided for cover letter generation");
+        sendResponse({ error: "No data provided for cover letter generation" });
+        return true;
+      }
+
+      console.log("Sending to native messaging:", {
+        command: "generate-cover-letter",
+        data: message.data,
+      });
+
+      browser.runtime
+        .sendNativeMessage("com.riff-tech.EasyApply.Extension", {
+          command: "generate-cover-letter",
+          data: message.data,
+        })
+        .then((nativeResponse) => {
+          console.log(
+            "Native response for generate-cover-letter:",
+            nativeResponse
+          );
+          sendResponse(nativeResponse);
+        })
+        .catch((error) => {
+          handleNativeMessagingError(error);
+          sendResponse({ error: error.message });
+        });
+      return true;
+
+    default:
+      console.warn("Unknown message type:", message.type);
+      return false;
+  }
 });
 
 // Log any native messaging errors
 browser.runtime.onMessageExternal.addListener((message, sender) => {
-    console.log("Received external message:", message, "from:", sender);
+  console.log("Received external message:", message, "from:", sender);
 });
-
-// Handle native messaging errors
-function handleNativeMessagingError(error) {
-    console.error("Native messaging error:", error);
-}
 
 browser.runtime.onInstalled.addListener(() => {
-    console.log("Extension installed/updated");
-});
-
-// Listen for messages from content scripts or popup
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("received request in background: ", message);
-    if (message.type === "get-resume") {
-        browser.runtime.sendNativeMessage("com.riff-tech.EasyApply.Extension", {
-            command: "get-resume"
-        }).then((nativeResponse) => {
-            sendResponse(nativeResponse);
-        }).catch((error) => {
-            console.error("Native messaging error:", error);
-            sendResponse({ error: error.message });
-        });
-        // Return true to indicate async response
-        return true;
-    }
+  console.log("Extension installed/updated");
 });

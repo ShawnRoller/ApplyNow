@@ -8,7 +8,7 @@ class LoadingStateManager {
     constructor() {
         this.overlay = document.getElementById("loading-overlay");
         this.generateButton = document.getElementById("generate-button");
-        this.getContentButton = document.getElementById("get-content-button");
+//        this.getContentButton = document.getElementById("get-content-button");
         this.coverLetterDisplay = document.getElementById("cover-letter-display");
         this.shareButton = document.getElementById("share-button");
     }
@@ -19,7 +19,7 @@ class LoadingStateManager {
     showLoading() {
         this.overlay.classList.remove("hidden");
         this.generateButton.disabled = true;
-        this.getContentButton.disabled = true;
+//        this.getContentButton.disabled = true;
         this.coverLetterDisplay.disabled = true;
         this.shareButton.disabled = true;
     }
@@ -30,7 +30,7 @@ class LoadingStateManager {
     hideLoading() {
         this.overlay.classList.add("hidden");
         this.generateButton.disabled = false;
-        this.getContentButton.disabled = false;
+//        this.getContentButton.disabled = false;
         this.coverLetterDisplay.disabled = false;
         this.shareButton.disabled = false;
     }
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
                 const response = await browser.tabs.sendMessage(tab.id, {
-                    command: "generate-cover-letter",
+                    command: "generate-cover-letter-request",
                 });
                 
                 console.log("Cover letter received:", response);

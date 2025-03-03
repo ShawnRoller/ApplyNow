@@ -6,6 +6,7 @@
 //
 
 import WebKit
+import os
 
 #if os(iOS)
 import UIKit
@@ -18,10 +19,13 @@ import UniformTypeIdentifiers
 typealias PlatformViewController = NSViewController
 #endif
 
+import Foundation
 
 let extensionBundleIdentifier = "com.riff-tech.EasyApply.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
+    private let storeManager = StoreManager.shared
+    private let openAIService = OpenAIService()
     
     @IBOutlet var webView: WKWebView!
     
@@ -72,7 +76,7 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
 #endif
         
         // Update UI with existing resume if available
-        if let resume = StoreManager.shared.getResume() {
+        if let resume = storeManager.getResume() {
             updateResumeUI(withFilename: resume.filename)
         }
     }
@@ -98,12 +102,12 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             selectResume()
             
         case "remove-resume":
-            if StoreManager.shared.removeResume() {
+            if storeManager.removeResume() {
                 updateResumeUI(withFilename: nil)
             }
             
         default:
-            break
+            print("Unknown command received:", command)
         }
     }
     
@@ -121,16 +125,24 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             guard let self = self,
                   response == .OK,
                   let url = panel.url else {
+                os_log(.debug, "Document picker cancelled or no URL")
                 return
             }
             
             do {
+                os_log(.debug, "Reading file: %{public}@", url.lastPathComponent)
                 let content = try String(contentsOf: url, encoding: .utf8)
-                if ResumeManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
+                os_log(.debug, "File content length: %{public}d", content.count)
+                
+                if self.storeManager.saveResume(content: content, filename: url.lastPathComponent) {
+                    os_log(.debug, "Successfully saved resume")
                     self.updateResumeUI(withFilename: url.lastPathComponent)
+                } else {
+                    os_log(.error, "Failed to save resume")
+                    // TODO: Show error to user
                 }
             } catch {
-                print("Error reading text from file: \(error.localizedDescription)")
+                os_log(.error, "Error reading file: %{public}@", error.localizedDescription)
                 // TODO: Show error to user
             }
         }
@@ -138,6 +150,7 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
     }
     
     private func updateResumeUI(withFilename filename: String?) {
+        os_log(.debug, "Updating UI with filename: %{public}@", filename ?? "nil")
         let script = "updateResumeStatus('\(filename ?? "")')"
         webView.evaluateJavaScript(script)
     }
@@ -155,7 +168,7 @@ extension ViewController: UIDocumentPickerDelegate {
         
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
-            if StoreManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
+            if storeManager.saveResume(content: content, filename: url.lastPathComponent) {
                 updateResumeUI(withFilename: url.lastPathComponent)
             }
         } catch {

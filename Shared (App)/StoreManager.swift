@@ -2,86 +2,103 @@ import Foundation
 import os.log
 
 /**
- * Manages the storage and retrieval of resume text content in UserDefaults.
+ * Manages storage of resume and other persistent data
  */
-final class StoreManager {
-    /// UserDefaults key for storing the resume text content
-    private static let resumeKey = "com.riff-tech.EasyApply.resumeText"
-    
-    /// UserDefaults key for storing the resume filename
-    private static let resumeFilenameKey = "com.riff-tech.EasyApply.resumeFilename"
-    
-    /// Shared instance for singleton access
+class StoreManager {
     static let shared = StoreManager()
     
     /// UserDefaults instance for data persistence
-    private let defaults: UserDefaults
+    private let userDefaults: UserDefaults
+    private let resumeKey = "stored_resume"
+    private let filenameKey = "resume_filename"
     
     private init() {
+        // Use shared UserDefaults container for app group
         if let sharedDefaults = UserDefaults(suiteName: "group.com.riff-tech.EasyApply") {
-            self.defaults = sharedDefaults
+            self.userDefaults = sharedDefaults
             os_log(.debug, "Successfully initialized shared UserDefaults with suite name")
         } else {
             os_log(.error, "Failed to initialize shared UserDefaults, falling back to standard")
-            self.defaults = UserDefaults.standard
+            self.userDefaults = UserDefaults.standard
         }
     }
     
     /**
-     * Saves the resume text content and filename to UserDefaults.
-     * @param content The text content of the resume
-     * @param filename The name of the resume file
-     * @returns Boolean indicating whether the save was successful
+     * Resume data structure
      */
+    struct Resume {
+        let content: String
+        let filename: String
+    }
+    
+    /**
+     * Saves a resume to persistent storage
+     * @param content The content of the resume
+     * @param filename The name of the resume file
+     * @returns Boolean indicating success
+     */
+    @discardableResult
     func saveResume(content: String, filename: String) -> Bool {
-        os_log(.debug, "Saving resume: %{public}@", filename)
+        os_log(.debug, "Attempting to save resume: %{public}@", filename)
+        os_log(.debug, "Content length: %{public}d", content.count)
         
-        defaults.set(content, forKey: StoreManager.resumeKey)
-        defaults.set(filename, forKey: StoreManager.resumeFilenameKey)
+        userDefaults.set(content, forKey: resumeKey)
+        userDefaults.set(filename, forKey: filenameKey)
+        let success = userDefaults.synchronize()
         
         // Verify the save
-        if let savedContent = defaults.string(forKey: StoreManager.resumeKey),
-           let savedFilename = defaults.string(forKey: StoreManager.resumeFilenameKey),
+        if let savedContent = userDefaults.string(forKey: resumeKey),
+           let savedFilename = userDefaults.string(forKey: filenameKey),
            savedContent == content,
            savedFilename == filename {
-            os_log(.debug, "Successfully saved resume")
+            os_log(.debug, "Successfully verified resume save")
             return true
         } else {
             os_log(.error, "Failed to verify resume save")
+            
+            // Debug info
+            let hasContent = userDefaults.string(forKey: resumeKey) != nil
+            let hasFilename = userDefaults.string(forKey: filenameKey) != nil
+            os_log(.error, "Content exists: %{public}@, Filename exists: %{public}@", String(hasContent), String(hasFilename))
+            
             return false
         }
     }
     
     /**
-     * Retrieves the stored resume text content.
-     * @returns Tuple containing the text content and filename, if available
+     * Retrieves the stored resume
+     * @returns Optional Resume object
      */
-    func getResume() -> (content: String, filename: String)? {
+    func getResume() -> Resume? {
         os_log(.debug, "Attempting to retrieve resume")
         
-        guard let filename = defaults.string(forKey: StoreManager.resumeFilenameKey),
-              let content = defaults.string(forKey: StoreManager.resumeKey) else {
-            os_log(.debug, "No resume found")
+        guard let content = userDefaults.string(forKey: resumeKey),
+              let filename = userDefaults.string(forKey: filenameKey) else {
+            os_log(.debug, "No resume found in UserDefaults")
+            os_log(.debug, "Keys present: %{public}@", userDefaults.dictionaryRepresentation().keys.joined(separator: ", "))
             return nil
         }
         
-        os_log(.debug, "Successfully retrieved resume: %{public}@", filename)
-        return (content, filename)
+        os_log(.debug, "Found resume: %{public}@", filename)
+        os_log(.debug, "Content length: %{public}d", content.count)
+        return Resume(content: content, filename: filename)
     }
     
     /**
-     * Removes the stored resume from UserDefaults.
-     * @returns Boolean indicating whether the removal was successful
+     * Removes the stored resume
+     * @returns Boolean indicating success
      */
+    @discardableResult
     func removeResume() -> Bool {
         os_log(.debug, "Attempting to remove resume")
         
-        defaults.removeObject(forKey: StoreManager.resumeKey)
-        defaults.removeObject(forKey: StoreManager.resumeFilenameKey)
+        userDefaults.removeObject(forKey: resumeKey)
+        userDefaults.removeObject(forKey: filenameKey)
+        let success = userDefaults.synchronize()
         
         // Verify removal
-        let verificationPassed = defaults.string(forKey: StoreManager.resumeKey) == nil &&
-        defaults.string(forKey: StoreManager.resumeFilenameKey) == nil
+        let verificationPassed = userDefaults.string(forKey: resumeKey) == nil &&
+                               userDefaults.string(forKey: filenameKey) == nil
         
         if verificationPassed {
             os_log(.debug, "Successfully removed resume")
