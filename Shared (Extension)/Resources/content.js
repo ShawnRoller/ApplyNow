@@ -43,6 +43,25 @@ class APIError extends Error {
 }
 
 /**
+ * Gets the resume content from the native messaging
+ * @returns {Promise<string>} The resume content
+ */
+async function getResumeContent() {
+  try {
+    const response = await browser.runtime.sendNativeMessage(
+      "com.riff-tech.EasyApply.Extension",
+      {
+        command: "get-resume",
+      }
+    );
+    return response.content;
+  } catch (error) {
+    console.error("Error fetching resume:", error);
+    throw new APIError("Failed to get resume content", undefined, error);
+  }
+}
+
+/**
  * Generates a cover letter based on the resume and job description using OpenAI API
  * @param {Object} params - The parameters for generating the cover letter
  * @param {string} params.resume - The resume content
@@ -123,24 +142,23 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const content = extractPageContent();
     console.log("Extracted content:", content);
     sendResponse(content);
+    return true;
   }
 
   if (message.command === "generate-cover-letter") {
-    // Handle async operation properly
-    generateCoverLetter({
-      resume: "test123",
-      jobDescription: "test123",
-    })
-      .then((coverLetter) => {
+    (async () => {
+      try {
+        const coverLetter = await generateCoverLetter({
+          resume: "test123",
+          jobDescription: "test123",
+        });
         console.log("Generated Cover Letter:", coverLetter);
         sendResponse(coverLetter);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error generating cover letter:", error);
         sendResponse({ error: error.message });
-      });
+      }
+    })();
+    return true;
   }
-
-  // Required for async response
-  return true;
 });

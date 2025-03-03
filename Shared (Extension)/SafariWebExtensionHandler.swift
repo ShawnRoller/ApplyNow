@@ -40,12 +40,20 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
             
             switch command {
             case "get-resume":
+                os_log(.debug, "Attempting to get resume...")
                 if let resume = ResumeManager.shared.getResume() {
                     os_log(.debug, "Found resume: %{public}@", resume.filename)
-                    responseMessage = ["filename": resume.filename]
+                    responseMessage = [
+                        "filename": resume.filename,
+                        "content": resume.content
+                    ]
+                    os_log(.debug, "Response prepared with content")
                 } else {
-                    os_log(.debug, "No resume found")
-                    responseMessage = ["filename": NSNull()]
+                    os_log(.error, "No resume found in ResumeManager")
+                    responseMessage = [
+                        "error": "No resume found",
+                        "filename": NSNull()
+                    ]
                 }
             default:
                 os_log(.error, "Unknown command: %{public}@", command)
@@ -56,7 +64,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
             responseMessage = ["error": "Invalid message format"]
         }
         
-        os_log(.debug, "Sending response: %{public}@", String(describing: responseMessage))
+        os_log(.debug, "Sending response keys: %{public}@", responseMessage.keys.map { $0 }.joined(separator: ", "))
         
         if #available(iOS 15.0, macOS 11.0, *) {
             response.userInfo = [SFExtensionMessageKey: responseMessage]

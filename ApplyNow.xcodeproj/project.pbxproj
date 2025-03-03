@@ -121,7 +121,6 @@
 				Resources/popup.css,
 				Resources/popup.html,
 				Resources/popup.js,
-				ResumeManager.swift,
 				SafariWebExtensionHandler.swift,
 			);
 			target = 47F7329A2D74DC5C00296E96 /* ApplyNow Extension (iOS) */;
@@ -137,8 +136,21 @@
 				Resources/popup.css,
 				Resources/popup.html,
 				Resources/popup.js,
-				ResumeManager.swift,
 				SafariWebExtensionHandler.swift,
+			);
+			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
+		};
+		47F734812D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ResumeManager.swift,
+			);
+			target = 47F7329A2D74DC5C00296E96 /* ApplyNow Extension (iOS) */;
+		};
+		47F734822D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ResumeManager.swift,
 			);
 			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
 		};
@@ -150,6 +162,8 @@
 			exceptions = (
 				47F732CA2D74DC5C00296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow (iOS)" target */,
 				47F732D42D74DC5C00296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow (macOS)" target */,
+				47F734812D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */,
+				47F734822D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (macOS)" target */,
 			);
 			path = "Shared (App)";
 			sourceTree = "<group>";

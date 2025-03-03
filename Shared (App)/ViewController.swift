@@ -21,6 +21,9 @@ typealias PlatformViewController = NSViewController
 // Import ResumeManager from the same module
 import Foundation
 
+// Since ResumeManager is in the same target, we don't need to import it
+// It should be accessible as part of the same module
+
 let extensionBundleIdentifier = "com.riff-tech.EasyApply.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
@@ -29,7 +32,7 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
 
     #if os(iOS)
     private lazy var documentPicker: UIDocumentPickerViewController = {
-        let types: [UTType] = [.pdf]
+        let types: [UTType] = [.text, .plainText]  // Only allow text files
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: types)
         picker.delegate = self
         picker.allowsMultipleSelection = false
@@ -114,7 +117,7 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         present(documentPicker, animated: true)
         #elseif os(macOS)
         let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.pdf]
+        panel.allowedContentTypes = [.text, .plainText]  // Only allow text files
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
@@ -122,13 +125,18 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         panel.beginSheetModal(for: view.window!) { [weak self] response in
             guard let self = self,
                   response == .OK,
-                  let url = panel.url,
-                  let data = try? Data(contentsOf: url) else {
+                  let url = panel.url else {
                 return
             }
             
-            if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
-                self.updateResumeUI(withFilename: url.lastPathComponent)
+            do {
+                let content = try String(contentsOf: url, encoding: .utf8)
+                if ResumeManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
+                    self.updateResumeUI(withFilename: url.lastPathComponent)
+                }
+            } catch {
+                print("Error reading text from file: \(error.localizedDescription)")
+                // TODO: Show error to user
             }
         }
         #endif
@@ -151,15 +159,15 @@ extension ViewController: UIDocumentPickerDelegate {
         let didStartAccessing = url.startAccessingSecurityScopedResource()
         
         do {
-            let data = try Data(contentsOf: url)
-            if ResumeManager.shared.saveResume(data: data, filename: url.lastPathComponent) {
+            let content = try String(contentsOf: url, encoding: .utf8)
+            if ResumeManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
                 updateResumeUI(withFilename: url.lastPathComponent)
             }
         } catch {
-            print("Error reading data from URL: \(error.localizedDescription)")
+            print("Error reading text from file: \(error.localizedDescription)")
+            // TODO: Show error to user
         }
         
-        // Stop accessing security-scoped resource
         if didStartAccessing {
             url.stopAccessingSecurityScopedResource()
         }

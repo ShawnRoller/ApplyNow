@@ -78,28 +78,38 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Get content button element not found");
   }
-    
-    // Get generate button setup
-    const generateButton = document.getElementById("generate-button");
-    if (generateButton) {
-        generateButton.addEventListener("click", async () => {
-        try {
-          const tab = await getCurrentTab();
-          if (!tab) {
-            console.error("No active tab found");
-            return;
-          }
 
-          const response = await browser.tabs.sendMessage(tab.id, {
-            command: "generate-cover-letter",
-          });
-
-          console.log("Cover letter received:", response);
-        } catch (error) {
-          console.error("Error getting cover letter:", error);
+  // Get generate button setup
+  const generateButton = document.getElementById("generate-button");
+  if (generateButton) {
+    generateButton.addEventListener("click", async () => {
+      try {
+        const tab = await getCurrentTab();
+        if (!tab) {
+          console.error("No active tab found");
+          return;
         }
-      });
-    } else {
-      console.error("Generate button element not found");
-    }
+
+        const response = await browser.tabs.sendMessage(tab.id, {
+          command: "generate-cover-letter",
+        });
+
+        console.log("Cover letter received:", response);
+        // Display the generated cover letter
+        const coverLetterDisplay = document.getElementById(
+          "cover-letter-display"
+        );
+        if (coverLetterDisplay && response) {
+          coverLetterDisplay.textContent =
+            typeof response === "string"
+              ? response
+              : JSON.stringify(response, null, 2);
+        }
+      } catch (error) {
+        console.error("Error getting cover letter:", error);
+      }
+    });
+  } else {
+    console.error("Generate button element not found");
+  }
 });
