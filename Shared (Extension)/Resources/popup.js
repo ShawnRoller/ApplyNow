@@ -97,7 +97,6 @@ async function shareCoverLetter(coverLetterText) {
     if (navigator.share && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
-        title: "Cover Letter",
       });
     } else {
       // Fallback for browsers that don't support native sharing
