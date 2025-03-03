@@ -2,6 +2,41 @@
 console.log("Popup loaded");
 
 /**
+ * Manages the loading state of the popup UI
+ */
+class LoadingStateManager {
+  constructor() {
+    this.overlay = document.getElementById("loading-overlay");
+    this.generateButton = document.getElementById("generate-button");
+    this.getContentButton = document.getElementById("get-content-button");
+    this.coverLetterDisplay = document.getElementById("cover-letter-display");
+    this.shareButton = document.getElementById("share-button");
+  }
+
+  /**
+   * Shows the loading overlay and disables interactive elements
+   */
+  showLoading() {
+    this.overlay.classList.remove("hidden");
+    this.generateButton.disabled = true;
+    this.getContentButton.disabled = true;
+    this.coverLetterDisplay.disabled = true;
+    this.shareButton.disabled = true;
+  }
+
+  /**
+   * Hides the loading overlay and enables interactive elements
+   */
+  hideLoading() {
+    this.overlay.classList.add("hidden");
+    this.generateButton.disabled = false;
+    this.getContentButton.disabled = false;
+    this.coverLetterDisplay.disabled = false;
+    this.shareButton.disabled = false;
+  }
+}
+
+/**
  * Updates the resume status text in the popup
  * @param {string} text - The text to display
  */
@@ -31,7 +66,7 @@ browser.runtime
   .then((response) => {
     console.log("Received response:", response);
     if (response && response.filename) {
-      updateResumeStatus(`Current resume: ${response.filename}`);
+      updateResumeStatus(response.filename);
     } else {
       updateResumeStatus("No resume uploaded yet");
     }
@@ -84,6 +119,8 @@ async function shareCoverLetter(coverLetterText) {
  * Sets up event listeners for the buttons
  */
 document.addEventListener("DOMContentLoaded", () => {
+  const loadingManager = new LoadingStateManager();
+
   // Test button setup
   const testButton = document.getElementById("test-button");
   if (testButton) {
@@ -98,10 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const getContentButton = document.getElementById("get-content-button");
   if (getContentButton) {
     getContentButton.addEventListener("click", async () => {
+      loadingManager.showLoading();
       try {
         const tab = await getCurrentTab();
         if (!tab) {
           console.error("No active tab found");
+          loadingManager.hideLoading();
           return;
         }
 
@@ -120,6 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Error getting page content:", error);
+      } finally {
+        loadingManager.hideLoading();
       }
     });
   } else {
@@ -130,10 +171,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateButton = document.getElementById("generate-button");
   if (generateButton) {
     generateButton.addEventListener("click", async () => {
+      loadingManager.showLoading();
       try {
         const tab = await getCurrentTab();
         if (!tab) {
           console.error("No active tab found");
+          loadingManager.hideLoading();
           return;
         }
 
@@ -154,6 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Error getting cover letter:", error);
+      } finally {
+        loadingManager.hideLoading();
       }
     });
   } else {
@@ -163,12 +208,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Share button setup
   const shareButton = document.getElementById("share-button");
   if (shareButton) {
-    shareButton.addEventListener("click", () => {
+    shareButton.addEventListener("click", async () => {
       const coverLetterDisplay = document.getElementById(
         "cover-letter-display"
       );
       if (coverLetterDisplay && coverLetterDisplay.value) {
-        shareCoverLetter(coverLetterDisplay.value);
+        loadingManager.showLoading();
+        try {
+          await shareCoverLetter(coverLetterDisplay.value);
+        } catch (error) {
+          console.error("Error sharing cover letter:", error);
+        } finally {
+          loadingManager.hideLoading();
+        }
       } else {
         console.error("No cover letter content to share");
       }
