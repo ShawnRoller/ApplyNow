@@ -78,4 +78,28 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Get content button element not found");
   }
+    
+    // Get generate button setup
+    const generateButton = document.getElementById("generate-button");
+    if (generateButton) {
+        generateButton.addEventListener("click", async () => {
+        try {
+          const tab = await getCurrentTab();
+          if (!tab) {
+            console.error("No active tab found");
+            return;
+          }
+
+          const response = await browser.tabs.sendMessage(tab.id, {
+            command: "generate-cover-letter",
+          });
+
+          console.log("Cover letter received:", response);
+        } catch (error) {
+          console.error("Error getting cover letter:", error);
+        }
+      });
+    } else {
+      console.error("Generate button element not found");
+    }
 });
