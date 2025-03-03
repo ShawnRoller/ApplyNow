@@ -71,7 +71,7 @@
 				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
-				ResumeManager.swift,
+				StoreManager.swift,
 				ViewController.swift,
 			);
 			target = 47F7327C2D74DC5C00296E96 /* ApplyNow (iOS) */;
@@ -98,7 +98,7 @@
 				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
-				ResumeManager.swift,
+				StoreManager.swift,
 				ViewController.swift,
 			);
 			target = 47F7328E2D74DC5C00296E96 /* ApplyNow (macOS) */;
@@ -143,14 +143,14 @@
 		47F734812D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				ResumeManager.swift,
+				StoreManager.swift,
 			);
 			target = 47F7329A2D74DC5C00296E96 /* ApplyNow Extension (iOS) */;
 		};
 		47F734822D75FF3200296E96 /* Exceptions for "Shared (App)" folder in "ApplyNow Extension (macOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				ResumeManager.swift,
+				StoreManager.swift,
 			);
 			target = 47F732A42D74DC5C00296E96 /* ApplyNow Extension (macOS) */;
 		};

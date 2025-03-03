@@ -1,153 +1,153 @@
 :root {
-  --primary-color: #007aff;
-  --text-color: #000000;
-  --background-color: #ffffff;
-  --spacing: 16px;
-  --content-width: 100%;
+    --primary-color: #007aff;
+    --text-color: #000000;
+    --background-color: #ffffff;
+    --spacing: 16px;
+    --content-width: 100%;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #ffffff;
-    --background-color: #1c1c1e;
-  }
+    :root {
+        --text-color: #ffffff;
+        --background-color: #1c1c1e;
+    }
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 /* Full-width content centered horizontally (with horizontal margins equal to var(--spacing)) */
 .content-wrapper {
-  width: calc(100% - 2 * var(--spacing));
-  margin: 0 auto;
-  padding: var(--spacing);
+    width: calc(100% - 2 * var(--spacing));
+    margin: 0 auto;
+    padding: var(--spacing);
 }
 
 .container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
 }
 
 h1 {
-  margin: 0;
-  font-size: 1.5em;
-  font-weight: 600;
-  color: var(--primary-color);
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
 h2 {
-  margin: 0;
-  font-size: 1.2em;
-  font-weight: 500;
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 500;
 }
 
 /* Combined layout for resume and cover letter sections */
 .resume-info,
 .cover-letter-section {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing) / 2);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
 }
 
 #resume-status {
-  margin: 0;
-  font-size: 1em;
-  opacity: 0.8;
+    margin: 0;
+    font-size: 1em;
+    opacity: 0.8;
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .icon-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: var(--text-color);
-  cursor: pointer;
-  transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .icon-button:hover {
-  background-color: rgba(0, 122, 255, 0.1);
+    background-color: rgba(0, 122, 255, 0.1);
 }
 
 .icon-button svg {
-  width: 16px;
-  height: 16px;
+    width: 16px;
+    height: 16px;
 }
 
 #cover-letter-display {
-  width: 100%;
-  min-height: 200px;
-  padding: calc(var(--spacing) / 2);
-  border: 1px solid var(--primary-color);
-  border-radius: 6px;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: inherit;
-  font-size: 0.9em;
-  line-height: 1.4;
-  resize: vertical;
+    width: 100%;
+    min-height: 200px;
+    padding: calc(var(--spacing) / 2);
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.9em;
+    line-height: 1.4;
+    resize: vertical;
 }
 
 #cover-letter-display:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
 }
 
 .action-button {
-  padding: 8px 16px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1em;
-  font-weight: 500;
-  transition: all 0.2s;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s;
 }
 
 .action-button:hover {
-  opacity: 0.9;
+    opacity: 0.9;
 }
 
 .action-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-  opacity: 0.7;
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 /* Loading overlay covers the entire screen with a semi-transparent dark background */
 .loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }
 
 /* Utility class to hide elements */
 .hidden {
-  display: none;
+    display: none;
 }

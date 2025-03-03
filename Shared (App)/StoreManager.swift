@@ -4,7 +4,7 @@ import os.log
 /**
  * Manages the storage and retrieval of resume text content in UserDefaults.
  */
-final class ResumeManager {
+final class StoreManager {
     /// UserDefaults key for storing the resume text content
     private static let resumeKey = "com.riff-tech.EasyApply.resumeText"
     
@@ -12,7 +12,7 @@ final class ResumeManager {
     private static let resumeFilenameKey = "com.riff-tech.EasyApply.resumeFilename"
     
     /// Shared instance for singleton access
-    static let shared = ResumeManager()
+    static let shared = StoreManager()
     
     /// UserDefaults instance for data persistence
     private let defaults: UserDefaults
@@ -36,12 +36,12 @@ final class ResumeManager {
     func saveResume(content: String, filename: String) -> Bool {
         os_log(.debug, "Saving resume: %{public}@", filename)
         
-        defaults.set(content, forKey: ResumeManager.resumeKey)
-        defaults.set(filename, forKey: ResumeManager.resumeFilenameKey)
+        defaults.set(content, forKey: StoreManager.resumeKey)
+        defaults.set(filename, forKey: StoreManager.resumeFilenameKey)
         
         // Verify the save
-        if let savedContent = defaults.string(forKey: ResumeManager.resumeKey),
-           let savedFilename = defaults.string(forKey: ResumeManager.resumeFilenameKey),
+        if let savedContent = defaults.string(forKey: StoreManager.resumeKey),
+           let savedFilename = defaults.string(forKey: StoreManager.resumeFilenameKey),
            savedContent == content,
            savedFilename == filename {
             os_log(.debug, "Successfully saved resume")
@@ -59,8 +59,8 @@ final class ResumeManager {
     func getResume() -> (content: String, filename: String)? {
         os_log(.debug, "Attempting to retrieve resume")
         
-        guard let filename = defaults.string(forKey: ResumeManager.resumeFilenameKey),
-              let content = defaults.string(forKey: ResumeManager.resumeKey) else {
+        guard let filename = defaults.string(forKey: StoreManager.resumeFilenameKey),
+              let content = defaults.string(forKey: StoreManager.resumeKey) else {
             os_log(.debug, "No resume found")
             return nil
         }
@@ -76,12 +76,12 @@ final class ResumeManager {
     func removeResume() -> Bool {
         os_log(.debug, "Attempting to remove resume")
         
-        defaults.removeObject(forKey: ResumeManager.resumeKey)
-        defaults.removeObject(forKey: ResumeManager.resumeFilenameKey)
+        defaults.removeObject(forKey: StoreManager.resumeKey)
+        defaults.removeObject(forKey: StoreManager.resumeFilenameKey)
         
         // Verify removal
-        let verificationPassed = defaults.string(forKey: ResumeManager.resumeKey) == nil &&
-            defaults.string(forKey: ResumeManager.resumeFilenameKey) == nil
+        let verificationPassed = defaults.string(forKey: StoreManager.resumeKey) == nil &&
+        defaults.string(forKey: StoreManager.resumeFilenameKey) == nil
         
         if verificationPassed {
             os_log(.debug, "Successfully removed resume")

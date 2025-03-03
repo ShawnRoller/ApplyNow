@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="popup.css" />
-    <script src="popup.js" defer></script>
-    <script src="content.js" defer></script>
-  </head>
-  <body>
-    <!-- Loading overlay -->
-    <div id="loading-overlay" class="loading-overlay hidden">
-    </div>
-
-    <!-- Main content wrapper -->
-    <div class="content-wrapper">
-      <div class="container">
-        <h1>Cover Letter Generator</h1>
-        <div class="resume-info">
-          <h2>Your Resume</h2>
-          <p id="resume-status">Loading...</p>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="popup.css" />
+        <script src="popup.js" defer></script>
+        <script src="content.js" defer></script>
+    </head>
+    <body>
+        <!-- Loading overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
         </div>
-        <button id="get-content-button" class="action-button">
-          Print Page Content for Testing
-        </button>
-        <button id="generate-button" class="action-button">
-          Generate cover letter
-        </button>
-        <div class="cover-letter-section">
-          <div class="section-header">
-            <h2>Cover Letter</h2>
-            <button
-              id="share-button"
-              class="icon-button"
-              title="Share cover letter"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 6C13.1046 6 14 5.10457 14 4C14 2.89543 13.1046 2 12 2C10.8954 2 10 2.89543 10 4C10 4.28862 10.0587 4.56352 10.1659 4.81377L6.53216 6.89443C6.20496 6.34897 5.64206 6 5 6C3.89543 6 3 6.89543 3 8C3 9.10457 3.89543 10 5 10C5.64206 10 6.20496 9.65103 6.53216 9.10557L10.1659 11.1862C10.0587 11.4365 10 11.7114 10 12C10 13.1046 10.8954 14 12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C11.3579 10 10.795 10.349 10.4678 10.8944L6.83408 8.81377C6.94127 8.56352 7 8.28862 7 8C7 7.71138 6.94127 7.43648 6.83408 7.18623L10.4678 5.10557C10.795 5.65103 11.3579 6 12 6Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <textarea
-            id="cover-letter-display"
-            placeholder="Your generated cover letter will appear here..."
-            rows="10"
-          ></textarea>
+        
+        <!-- Main content wrapper -->
+        <div class="content-wrapper">
+            <div class="container">
+                <h1>Cover Letter Generator</h1>
+                <div class="resume-info">
+                    <h2>Your Resume File</h2>
+                    <p id="resume-status">Loading...</p>
+                </div>
+<!--                <button id="get-content-button" class="action-button">-->
+<!--                    Print Page Content for Testing-->
+<!--                </button>-->
+                <button id="generate-button" class="action-button">
+                    Generate cover letter
+                </button>
+                <div class="cover-letter-section">
+                    <div class="section-header">
+                        <h2>Cover Letter</h2>
+                        <button
+                            id="share-button"
+                            class="icon-button"
+                            title="Share cover letter"
+                            >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                >
+                                <path
+                                d="M12 6C13.1046 6 14 5.10457 14 4C14 2.89543 13.1046 2 12 2C10.8954 2 10 2.89543 10 4C10 4.28862 10.0587 4.56352 10.1659 4.81377L6.53216 6.89443C6.20496 6.34897 5.64206 6 5 6C3.89543 6 3 6.89543 3 8C3 9.10457 3.89543 10 5 10C5.64206 10 6.20496 9.65103 6.53216 9.10557L10.1659 11.1862C10.0587 11.4365 10 11.7114 10 12C10 13.1046 10.8954 14 12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C11.3579 10 10.795 10.349 10.4678 10.8944L6.83408 8.81377C6.94127 8.56352 7 8.28862 7 8C7 7.71138 6.94127 7.43648 6.83408 7.18623L10.4678 5.10557C10.795 5.65103 11.3579 6 12 6Z"
+                                fill="currentColor"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                    <textarea
+                        id="cover-letter-display"
+                        placeholder="Your generated cover letter will appear here..."
+                        rows="10"
+                        ></textarea>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

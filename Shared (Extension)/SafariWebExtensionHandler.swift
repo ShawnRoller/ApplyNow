@@ -41,7 +41,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
             switch command {
             case "get-resume":
                 os_log(.debug, "Attempting to get resume...")
-                if let resume = ResumeManager.shared.getResume() {
+                if let resume = StoreManager.shared.getResume() {
                     os_log(.debug, "Found resume: %{public}@", resume.filename)
                     responseMessage = [
                         "filename": resume.filename,
@@ -49,7 +49,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
                     ]
                     os_log(.debug, "Response prepared with content")
                 } else {
-                    os_log(.error, "No resume found in ResumeManager")
+                    os_log(.error, "No resume found in StoreManager")
                     responseMessage = [
                         "error": "No resume found",
                         "filename": NSNull()

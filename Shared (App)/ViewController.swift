@@ -18,19 +18,14 @@ import UniformTypeIdentifiers
 typealias PlatformViewController = NSViewController
 #endif
 
-// Import ResumeManager from the same module
-import Foundation
-
-// Since ResumeManager is in the same target, we don't need to import it
-// It should be accessible as part of the same module
 
 let extensionBundleIdentifier = "com.riff-tech.EasyApply.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
-
+    
     @IBOutlet var webView: WKWebView!
-
-    #if os(iOS)
+    
+#if os(iOS)
     private lazy var documentPicker: UIDocumentPickerViewController = {
         let types: [UTType] = [.text, .plainText]  // Only allow text files
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: types)
@@ -38,34 +33,34 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         picker.allowsMultipleSelection = false
         return picker
     }()
-    #endif
-
+#endif
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.webView.navigationDelegate = self
-
+        
 #if os(iOS)
         self.webView.scrollView.isScrollEnabled = false
 #endif
-
+        
         self.webView.configuration.userContentController.add(self, name: "controller")
-
+        
         self.webView.loadFileURL(Bundle.main.url(forResource: "Main", withExtension: "html")!, allowingReadAccessTo: Bundle.main.resourceURL!)
     }
-
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 #if os(iOS)
         webView.evaluateJavaScript("show('ios')")
 #elseif os(macOS)
         webView.evaluateJavaScript("show('mac')")
-
+        
         SFSafariExtensionManager.getStateOfSafariExtension(withIdentifier: extensionBundleIdentifier) { (state, error) in
             guard let state = state, error == nil else {
                 // Insert code to inform the user that something went wrong.
                 return
             }
-
+            
             DispatchQueue.main.async {
                 if #available(macOS 13, *) {
                     webView.evaluateJavaScript("show('mac', \(state.isEnabled), true)")
@@ -75,19 +70,19 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             }
         }
 #endif
-
+        
         // Update UI with existing resume if available
-        if let resume = ResumeManager.shared.getResume() {
+        if let resume = StoreManager.shared.getResume() {
             updateResumeUI(withFilename: resume.filename)
         }
     }
-
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let command = message.body as? String else { return }
         
         switch command {
         case "open-preferences":
-            #if os(macOS)
+#if os(macOS)
             SFSafariApplication.showPreferencesForExtension(withIdentifier: extensionBundleIdentifier) { error in
                 guard error == nil else {
                     return
@@ -97,13 +92,13 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
                     NSApp.terminate(self)
                 }
             }
-            #endif
+#endif
             
         case "select-resume":
             selectResume()
             
         case "remove-resume":
-            if ResumeManager.shared.removeResume() {
+            if StoreManager.shared.removeResume() {
                 updateResumeUI(withFilename: nil)
             }
             
@@ -111,11 +106,11 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             break
         }
     }
-
+    
     private func selectResume() {
-        #if os(iOS)
+#if os(iOS)
         present(documentPicker, animated: true)
-        #elseif os(macOS)
+#elseif os(macOS)
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.text, .plainText]  // Only allow text files
         panel.allowsMultipleSelection = false
@@ -139,9 +134,9 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
                 // TODO: Show error to user
             }
         }
-        #endif
+#endif
     }
-
+    
     private func updateResumeUI(withFilename filename: String?) {
         let script = "updateResumeStatus('\(filename ?? "")')"
         webView.evaluateJavaScript(script)
@@ -160,7 +155,7 @@ extension ViewController: UIDocumentPickerDelegate {
         
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
-            if ResumeManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
+            if StoreManager.shared.saveResume(content: content, filename: url.lastPathComponent) {
                 updateResumeUI(withFilename: url.lastPathComponent)
             }
         } catch {
