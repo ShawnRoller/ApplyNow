@@ -79,7 +79,7 @@ async function generateCoverLetter({ resume, jobDescription }) {
           {
             role: "system",
             content:
-              "You are a professional cover letter writer. Create a compelling cover letter that matches the candidate's resume to the job description. Your entire response will be copied and pasted into a cover letter, so do not use any placeholder fields.  If you do not have content for information on the cover letter, omit that information. If the fields are required for the cover letter, respond with `Cover letter missing data: ` and include the data that is missing.",
+              "You are a professional cover letter writer. Create a compelling but brief cover letter that matches the candidate's resume to the job description. Your entire response will be copied and pasted into a cover letter, so do not use any placeholder fields.  If you do not have content for information on the cover letter, omit that information. If the fields are required for the cover letter, respond with `Cover letter missing data: ` and include the data that is missing. Do not include the candidate's address nor the current date.",
           },
           {
             role: "user",
