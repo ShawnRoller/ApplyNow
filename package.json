@@ -1,0 +1,25 @@
+{
+  "name": "applynow",
+  "version": "1.0.0",
+  "description": "ApplyNow is a Safari extension for macOS, iOS, and iPadOS that helps you generate customized cover letters using AI, based on your resume and the job description you're viewing in Safari. The extension uses OpenAI's API to create tailored cover letters that you can easily export and use in your job applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.14.1",
+    "@aws-amplify/backend-cli": "^1.4.11",
+    "aws-cdk": "^2.1002.0",
+    "aws-cdk-lib": "^2.181.1",
+    "constructs": "^10.4.2",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "aws-amplify": "^6.13.2"
+  }
+}

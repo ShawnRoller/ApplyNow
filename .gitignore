@@ -56,3 +56,9 @@ fastlane/test_output
 # Environment Variables
 .env
 .env.*
+
+# amplify
+node_modules
+.amplify
+amplify_outputs*
+amplifyconfiguration*
